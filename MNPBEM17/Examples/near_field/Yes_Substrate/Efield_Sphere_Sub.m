@@ -4,6 +4,7 @@ close all;
 % insert the the MNPBEM directory if you havn't added
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
+%% initialization
 
 % set dielectric environment
 epstab = {epsconst(1.0), epstable('gold.dat'), epsconst(1.52^2)};
@@ -30,11 +31,13 @@ p = shift(p, [0, 0, - min(p.pos(:, 3)) + 1 + ztab]);
 % set up COMPARTICLE object
 p = comparticle(epstab, {p}, [2, 1], 1, op);
 
-% set up BEM solver
-bem = bemsolver(p, op);
+% visualize object
+figure(1)
+plot(p, 'EdgeColor', 'b');
 
 % plane wave excitation
-exc = planewave([1, 0, 0], [0, 0, 1], op);  % x-axis polarization
+exc = planewave([1, 0, 0], [0, 0, 1], op);
+enei = 400:10:1000;
 
 %% tabulated Green functions
 if ~exist('greentab', 'var') || ~greentab.ismember(layer, enei, p)
@@ -46,12 +49,38 @@ if ~exist('greentab', 'var') || ~greentab.ismember(layer, enei, p)
   greentab = set(greentab, linspace(400, 1000, 10), op);
 end
 op.greentab = greentab;
+ 
+%% set up BEM solver
+bem = bemsolver(p, op);
 
-%% surface charge for plane wave excitation with wavelength of 500 nm
-sig = bem \ exc(p, 500);
-%  plot surface charge SIG2 at particle outside
-figure(1);
-plot(p, sig.sig2);
-colormap('whitejet');  % need to install the colormap 
-clim([-0.1 0.1])
-colorbar
+% wavelength of interest
+enei = 520;
+
+% surface charge
+sig = bem \ exc(p, enei);
+% scattering and extinction cross sections
+sca(1, :) = exc.sca(sig);
+ext(1, :) = exc.ext(sig);
+
+[x, y] = meshgrid(linspace(-35, 35, 142), linspace(-35, 35, 142));
+
+% particle boundary
+emesh = meshfield(p, x, y, 14.5, op, 'mindist', 0.15, 'nmax', 2000);
+% induced and incoming electric field
+e = emesh(sig) + emesh(exc.field(emesh.pt, enei));
+% norm of electric field
+ee = sqrt(dot(e, e, 3));
+
+% plot electric field
+figure(2)
+imagesc(x(:), y(:), ee);
+% clim([1 15]);
+
+colormap('whitejet');  % need to install the colormap
+colorbar;
+
+xlabel('x (nm)');
+ylabel('y (nm)');
+
+set(gca,'YDir','norm');
+axis equal tight

@@ -21,15 +21,17 @@ layer = layerstructure(epstab, [1, 3], ztab, op);
 % options for BEM simulation
 op = bemoptions('sim', 'stat', 'interp', 'curv', 'layer', layer);
 
-% initialize nanosphere
+% initialize nanosphere dimer
 radius = 14.5;
-p = trisphere(144, 2*radius);
+gap = 5;
+p1 = shift(trisphere(722, 2*radius), [  radius + gap/2, 0, radius + gap]);
+p2 = shift(trisphere(722, 2*radius), [- radius - gap/2, 0, radius + gap]);
+
+% set up COMPARTICLE object
+p = comparticle(epstab, {p1, p2}, [2, 1; 3, 1], 1, 2, op);
 
 %  shift nanosphere 1 nm above layer
 p = shift(p, [0, 0, - min(p.pos(:, 3)) + 1 + ztab]); 
-
-% set up COMPARTICLE object
-p = comparticle(epstab, {p}, [2, 1], 1, op);
 
 % visualize object
 figure(1)
@@ -62,10 +64,10 @@ sig = bem \ exc(p, enei);
 sca(1, :) = exc.sca(sig);
 ext(1, :) = exc.ext(sig);
 
-[x, y] = meshgrid(linspace(-35, 35, 142), linspace(-35, 35, 142));
+[x, y] = meshgrid(linspace(-70, 70, 284), linspace(-35, 35, 142));
 
 % particle boundary
-emesh = meshfield(p, x, y, 0, op, 'mindist', 0.15, 'nmax', 2000);
+emesh = meshfield(p, x, y, 14.5, op, 'mindist', 0.15, 'nmax', 2000);
 % induced and incoming electric field
 e = emesh(sig) + emesh(exc.field(emesh.pt, enei));
 % norm of electric field
