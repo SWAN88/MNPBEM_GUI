@@ -58,3 +58,16 @@ ylabel('y (nm)');
 
 set(gca,'YDir','norm');
 axis equal tight
+
+%% save the data
+% Specify the folder path where you want to save the file
+folder_path = 'C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17\Examples\near_field\No_Substrate';
+
+% Create the file name with variable
+file_name = ['sphere_efield_at_' num2str(enei) '.mat'];
+
+% Combine the folder path with the file name
+file_path = fullfile(folder_path, file_name);
+
+% Save the data
+save(file_path, 'x', 'y', 'ee');

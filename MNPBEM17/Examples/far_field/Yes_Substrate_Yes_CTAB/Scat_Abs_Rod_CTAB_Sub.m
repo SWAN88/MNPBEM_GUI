@@ -91,5 +91,3 @@ ylabel('Scattering cross section (nm^2)', 'FontSize', 20);
 % save(abs_filepath, 'abs_file', '-ascii');
 % save(sca_filepath, 'sca_file', '-ascii');
 
-
-
