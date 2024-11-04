@@ -8,7 +8,7 @@ addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Do
 op = bemoptions('sim', 'ret');
 
 % set dielectric environment
-epstab = {epsconst(1), epstable('gold.dat'), epstable('gold.dat')};
+epstab = {epsconst(1), epstable('gold_olmon.dat'), epstable('gold_olmon.dat')};
 
 % initialize nanosphere dimer
 radius = 14.5;
@@ -27,11 +27,13 @@ p = comparticle(epstab, {p1, p2}, [2, 1; 3, 1], 1, 2, op);
 bem = bemsolver(p, op);
 
 % plane wave excitation with polarization along with dimer axis
-% exc = planewave([0, 0, 1], [1, 0, 0], op);  % y-axis polarization
 exc = planewave([1, 0, 0], [0, 0, 1], op);  % x-axis polarization
 
-%%  surface charge for plane wave excitation with wavelength of 600 nm
-sig = bem \ exc(p, 600);
+%% surface charge for plane wave excitation with wavelength of interest
+% wavelength of interest
+enei = 520;
+
+sig = bem \ exc(p, enei);
 
 %  plot surface charge SIG2 at particle outside
 plot(p, sig.sig2);

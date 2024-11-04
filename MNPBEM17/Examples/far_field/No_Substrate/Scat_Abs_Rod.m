@@ -70,7 +70,7 @@ filepath = "C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documen
 spec_file = [enei', sum(sca, 2)*1e-18, sum(abs, 2)*1e-18];
 
 % Define file paths with the desired directory and filenames
-spec_filepath = fullfile(filepath, [particle_name '_spec_ypol.csv']);
+spec_filepath = fullfile(filepath, [particle_name '_spec.csv']);
 
 % Open the file for writing
 fid = fopen(spec_filepath, 'w');

@@ -7,7 +7,7 @@ addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Do
 %% initialization
 
 % set dielectric environment
-epstab = {epsconst(1.0), epstable('gold.dat'), epsconst(1.52^2)};
+epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.52^2)};
 
 % location of interface of substrate
 ztab = 0;
@@ -23,7 +23,7 @@ op = bemoptions('sim', 'stat', 'interp', 'curv', 'layer', layer);
 
 % initialize nanosphere
 radius = 14.5;
-p = trisphere(144, 2*radius);
+p = trisphere(722, 2*radius);
 
 %  shift nanosphere 1 nm above layer
 p = shift(p, [0, 0, - min(p.pos(:, 3)) + 1 + ztab]); 
@@ -32,8 +32,8 @@ p = shift(p, [0, 0, - min(p.pos(:, 3)) + 1 + ztab]);
 p = comparticle(epstab, {p}, [2, 1], 1, op);
 
 % visualize object
-% figure(1)
-% plot(p, 'EdgeColor', 'b');
+figure(1)
+plot(p, 'EdgeColor', 'b');
 
 % plane wave excitation
 exc = planewave([1, 0, 0], [0, 0, 1], op);
@@ -83,18 +83,24 @@ xlabel('Wavelength (nm)', 'FontSize', 20);
 ylabel('Scattering cross section (nm^2)', 'FontSize', 20);
 
 %% save data
-filepath = "C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17\Examples\far_field\No_Substrate";
+filepath = "C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17\Examples\far_field\Yes_Substrate";
 
-abs_file = [enei', abs, sum(abs, 2)];
-sca_file = [enei', sca, sum(sca, 2)];
+spec_file = [enei', sum(sca, 2)*1e-18, sum(abs, 2)*1e-18];
 
 % Define file paths with the desired directory and filenames
-abs_filepath = fullfile(filepath, [particle_name '_abs.txt']);
-sca_filepath = fullfile(filepath, [particle_name '_sca.txt']);
+spec_filepath = fullfile(filepath, [particle_name '_spec_sub.csv']);
 
-% Save data
-save(abs_filepath, 'abs_file', '-ascii');
-save(sca_filepath, 'sca_file', '-ascii');
+% Open the file for writing
+fid = fopen(spec_filepath, 'w');
+
+% Write the header
+fprintf(fid, 'wav,scat,abs');
+
+% Close and save data
+fclose(fid);
+
+% Save data as a CSV file
+writematrix(spec_file, spec_filepath, 'WriteMode', 'append');
 
 
 

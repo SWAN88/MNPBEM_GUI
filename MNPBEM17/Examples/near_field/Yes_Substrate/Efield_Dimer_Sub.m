@@ -7,7 +7,7 @@ addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Do
 %% initialization
 
 % set dielectric environment
-epstab = {epsconst(1.0), epstable('gold.dat'), epsconst(1.52^2)};
+epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.52^2)};
 
 % location of interface of substrate
 ztab = 0;
@@ -86,3 +86,16 @@ ylabel('y (nm)');
 
 set(gca,'YDir','norm');
 axis equal tight
+
+%% save the data
+% Specify the folder path where you want to save the file
+folder_path = 'C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17\Examples\near_field\Yes_Substrate';
+
+% Create the file name with variable
+file_name = ['dimer_sub_efield_at_' num2str(enei) '.mat'];
+
+% Combine the folder path with the file name
+file_path = fullfile(folder_path, file_name);
+
+% Save the data
+save(file_path, 'x', 'y', 'ee');

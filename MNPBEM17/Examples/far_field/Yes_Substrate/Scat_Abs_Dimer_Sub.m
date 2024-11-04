@@ -7,7 +7,7 @@ addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Do
 %% initialization
 
 % set dielectric environment
-epstab = {epsconst(1.0), epstable('gold.dat'), epsconst(1.52^2)};
+epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.52^2)};
 
 % location of interface of substrate
 ztab = 0;
@@ -71,7 +71,7 @@ end
 multiWaitbar('CloseAll');
 
 %% final plots
-particle_name = ['radius_' num2str(radius)];
+particle_name = ['radius_' num2str(radius) '_gap_' num2str(gap)];
 
 fig1 = figure('visible','on');
 abs = ext - sca;
@@ -87,16 +87,22 @@ ylabel('Scattering cross section (nm^2)', 'FontSize', 20);
 %% save data
 filepath = "C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17\Examples\far_field\Yes_Substrate";
 
-abs_file = [enei', abs, sum(abs, 2)];
-sca_file = [enei', sca, sum(sca, 2)];
+spec_file = [enei', sum(sca, 2)*1e-18, sum(abs, 2)*1e-18];
 
 % Define file paths with the desired directory and filenames
-abs_filepath = fullfile(filepath, [particle_name '_abs.txt']);
-sca_filepath = fullfile(filepath, [particle_name '_sca.txt']);
+spec_filepath = fullfile(filepath, [particle_name '_spec_sub.csv']);
 
-% Save data
-save(abs_filepath, 'abs_file', '-ascii');
-save(sca_filepath, 'sca_file', '-ascii');
+% Open the file for writing
+fid = fopen(spec_filepath, 'w');
+
+% Write the header
+fprintf(fid, 'wav,scat,abs');
+
+% Close and save data
+fclose(fid);
+
+% Save data as a CSV file
+writematrix(spec_file, spec_filepath, 'WriteMode', 'append');
 
 
 
