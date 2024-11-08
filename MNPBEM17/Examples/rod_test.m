@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-enei=400:1:1000;
+enei=400:10:1000;
 
 % set dielectric environment
 epstab = {epsconst(1^2), epstable('gold_olmon.dat'), epsconst(1.52^2), epsconst(1.33^2), epsconst(1.44^2)};
@@ -47,57 +47,20 @@ if ~exist( 'greentab', 'var' ) || ~greentab.ismember( layer, enei, p )
 end
 op.greentab = greentab;
 
-% set up BEM solver
-bem = bemsolver(p, op);
-
 % plane wave excitation
 exc = planewave([1, 0, 0], [0, 0, 1], op);
 
-%%  allocate scattering and extinction cross sections
-sca = zeros(length(enei), 2);
-ext = zeros(length(enei), 2);
-multiWaitbar('BEM solver', 0, 'Color', 'g', 'CanCancel', 'on');
-% loop over wavelengths
-for ien = 1 : length(enei)
-  % surface charge
-  sig = bem \ exc(p, enei(ien));
-  % scattering and extinction cross sections
-  sca(ien, :) = exc.sca(sig);
-  ext(ien, :) = exc.ext(sig);
-  multiWaitbar('BEM solver', ien / numel(enei));
-end
-multiWaitbar('CloseAll');
+% set up BEM solver
+bem = bemsolver(p, op);
 
-%% final plots
-fig1 = figure('visible','on');
-abs = ext - sca;
-plot(enei, sum(abs, 2), '-','LineWidth', 1);  
-xlabel('Wavelength (nm)', 'FontSize', 20);
-ylabel('Absorption cross section (nm^2)', 'FontSize', 20);
-
-fig2 = figure('visible','on');
-plot(enei, sum(sca, 2), '-', 'LineWidth', 1);  
-xlabel('Wavelength (nm)', 'FontSize', 20);
-ylabel('Scattering cross section (nm^2)', 'FontSize', 20);
-
-%% save data
-particle_name = ['length_' num2str(length_rod) '_width_' num2str(width_rod)];
-filepath = "C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17\Examples\far_field\Yes_Substrate_Yes_CTAB";
-
-spec_file = [enei', sum(sca, 2)*1e-18, sum(abs, 2)*1e-18];
-
-% Define file paths with the desired directory and filenames
-spec_filepath = fullfile(filepath, [particle_name '_ctab_sub_spec.csv']);
-
-% Open the file for writing
-fid = fopen(spec_filepath, 'w');
-
-% Write the header
-fprintf(fid, 'wav,scat,abs');
-
-% Close and save data
-fclose(fid);
-
-% Save data as a CSV file
-writematrix(spec_file, spec_filepath, 'WriteMode', 'append');
+%% surface charge for plane wave excitation with wavelength of interest
+% wavelength of interest
+enei = 600;
+sig = bem \ exc(p, enei);
+%  plot surface charge SIG at particle outside
+figure(2);
+plot(p, sig.sig);
+colormap('whitejet');  % need to install the colormap 
+clim([-0.1 0.1])
+colorbar
 
