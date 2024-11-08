@@ -37,7 +37,7 @@ plot(p, 'EdgeColor', 'b');
 
 % plane wave excitation
 exc = planewave([1, 0, 0], [0, 0, 1], op);
-enei = 400:10:1000;
+enei = 400:1:1000;
 
 %% tabulated Green functions
 if ~exist('greentab', 'var') || ~greentab.ismember(layer, enei, p)

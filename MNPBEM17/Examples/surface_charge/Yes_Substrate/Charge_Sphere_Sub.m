@@ -4,9 +4,8 @@ close all;
 % insert the the MNPBEM directory if you havn't added
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
-
 % set dielectric environment
-epstab = {epsconst(1.0), epstable('gold.dat'), epsconst(1.52^2)};
+epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.52^2)};
 
 % location of interface of substrate
 ztab = 0;
@@ -18,7 +17,7 @@ op = layerstructure.options;
 layer = layerstructure(epstab, [1, 3], ztab, op);
 
 % options for BEM simulation
-op = bemoptions('sim', 'stat', 'interp', 'curv', 'layer', layer);
+op = bemoptions('sim', 'stat', 'layer', layer);
 
 % initialize nanosphere
 radius = 14.5;
@@ -35,6 +34,7 @@ bem = bemsolver(p, op);
 
 % plane wave excitation
 exc = planewave([1, 0, 0], [0, 0, 1], op);  % x-axis polarization
+enei = 400:10:1000;
 
 %% tabulated Green functions
 if ~exist('greentab', 'var') || ~greentab.ismember(layer, enei, p)
@@ -43,17 +43,17 @@ if ~exist('greentab', 'var') || ~greentab.ismember(layer, enei, p)
   % Green function table
   greentab = compgreentablayer(layer, tab);
   % precompute Green function table
-  greentab = set(greentab, linspace(400, 1000, 10), op);
+  greentab = set(greentab, enei, op);
 end
 op.greentab = greentab;
 
 %% surface charge for plane wave excitation with wavelength of interest
 % wavelength of interest
-enei = 500;
+enei = 520;
 sig = bem \ exc(p, enei);
-%  plot surface charge SIG2 at particle outside
+%  plot surface charge SIG at particle outside
 figure(1);
-plot(p, sig.sig2);
+plot(p, sig.sig);
 colormap('whitejet');  % need to install the colormap 
 clim([-0.1 0.1])
 colorbar

@@ -1,13 +1,18 @@
-
-<!DOCTYPE html
-  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Getting Started with the MNPBEM Toolbox</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-02-18"><meta name="DC.source" content="bem_gs_top.m"><style type="text/css">
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+      -->
+<title>Getting Started with the MNPBEM Toolbox</title>
+<meta name="generator" content="MATLAB 23.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-11-05">
+<meta name="DC.source" content="bem_gs_top.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
 html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
@@ -23,7 +28,7 @@ a:visited { color:#004aa0; text-decoration:none; }
 
 p { padding:0px; margin:0px 0px 20px; }
 img { padding:0px; margin:0px 0px 20px; border:none; }
-p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
 
 ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
 ul li { padding:0px; margin:0px 0px 7px 0px; }
@@ -52,6 +57,7 @@ span.comment { color:#228B22 }
 span.string { color:#A020F0 }
 span.untermstring { color:#B20000 }
 span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
 
 .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
 .footer p { margin:0px; }
@@ -66,17 +72,66 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Getting Started with the MNPBEM Toolbox</h1><!--introduction--><p>Here we present a simple simulation example <a href="matlab:edit('demospecstat1.m')">demospecstat1.m</a> for a gold nanosphere embedded in water, and discuss the basic components of the MNPBEM toolbox.  A more detailed description of the BEM theory and the different classes can be found in the following sections and in the user guide.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Setting up the dielectric environment</a></li><li><a href="#3">Solving Maxwell's equations with the BEM solver</a></li></ul></div><h2 id="1">Setting up the dielectric environment</h2><p>MNPBEM simulations typically start by setting up the BEM options and defining the dielectric environment.</p><pre class="codeinput"><span class="comment">%  options for BEM simulation</span>
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Getting Started with the MNPBEM Toolbox</h1>
+<!--introduction-->
+<p>Here we present a simple simulation example <a href="matlab:edit('demospecstat1.m')">demospecstat1.m</a> for a gold nanosphere embedded in water, and discuss the basic components of the MNPBEM toolbox. A more detailed description of the BEM theory and the different classes can be found in the following sections and in the user guide.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Setting up the dielectric environment</a>
+</li>
+<li>
+<a href="#3">Solving Maxwell's equations with the BEM solver</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Setting up the dielectric environment</h2>
+<p>MNPBEM simulations typically start by setting up the BEM options and defining the dielectric environment.</p>
+<pre class="codeinput">
+<span class="comment">%  options for BEM simulation</span>
 op = bemoptions( <span class="string">'sim'</span>, <span class="string">'stat'</span> );
 <span class="comment">%  table of dielectric functions</span>
 epstab = { epsconst( 1.33 ^ 2 ), epstable( <span class="string">'gold.dat'</span> ) };
 <span class="comment">%  dielectric environement for single sphere</span>
 p = comparticle( epstab, { trisphere( 144, 10 ) }, [ 2, 1 ], 1, op );
-</pre><p>In the above example we first define a simulation using a quasistatic BEM solver.  In the second command line a table of dielectric functions, consisting of a constant dielectric function with a refractive index of 1.33 (water) and a tabulated dielectric function representative for gold, is set up.  The third command line defines in <tt>comparticle</tt> the dielectric environment for a gold nanosphere embedded in water, where:</p><div><ul><li><tt>epstab</tt> is the table of dielectric functions.</li><li><tt>trisphere(144,10)</tt> defines a sphere with 144 vertices and with a diameter of 10 nanometers.</li><li><tt>[2,1]</tt> points in the table <tt>epstab</tt> to the the dielectric functions in- and out-side the nanosphere.</li><li><tt>1</tt> indicates that the surface of the nanosphere is a closed surface.</li></ul></div><p>Below we will give a more detailed description of how to properly define the <a href="bem_ug_comparticle.html">dielectric properties</a> of single, coupled and connected nanoparticles which are described by different dielectric functions.  To <a href="matlab:plot(trisphere(144,10),'EdgeColor','b')">plot</a> the particle that we have just produced we execute</p><pre class="codeinput"><span class="comment">%  plot metallic nanosphere</span>
+</pre>
+<p>In the above example we first define a simulation using a quasistatic BEM solver. In the second command line a table of dielectric functions, consisting of a constant dielectric function with a refractive index of 1.33 (water) and a tabulated dielectric function representative for gold, is set up. The third command line defines in <tt>comparticle</tt> the dielectric environment for a gold nanosphere embedded in water, where:</p>
+<div>
+<ul>
+<li>
+<tt>epstab</tt> is the table of dielectric functions.</li>
+<li>
+<tt>trisphere(144,10)</tt> defines a sphere with 144 vertices and with a diameter of 10 nanometers.</li>
+<li>
+<tt>[2,1]</tt> points in the table <tt>epstab</tt> to the the dielectric functions in- and out-side the nanosphere.</li>
+<li>
+<tt>1</tt> indicates that the surface of the nanosphere is a closed surface.</li>
+</ul>
+</div>
+<p>Below we will give a more detailed description of how to properly define the <a href="bem_ug_comparticle.html">dielectric properties</a> of single, coupled and connected nanoparticles which are described by different dielectric functions. To <a href="matlab:plot(trisphere(144,10),'EdgeColor','b')">plot</a> the particle that we have just produced we execute</p>
+<pre class="codeinput">
+<span class="comment">%  plot metallic nanosphere</span>
 plot( p, <span class="string">'EdgeColor'</span>, <span class="string">'b'</span> );
-</pre><h2 id="3">Solving Maxwell's equations with the BEM solver</h2><p>The next step is to set up a <a href="bem_ug_bemsolver.html">BEM solver</a></p><pre class="codeinput"><span class="comment">%  set up BEM solver</span>
+</pre>
+<h2 id="3">Solving Maxwell's equations with the BEM solver</h2>
+<p>The next step is to set up a <a href="bem_ug_bemsolver.html">BEM solver</a>
+</p>
+<pre class="codeinput">
+<span class="comment">%  set up BEM solver</span>
 bem = bemsolver( p, op );
-</pre><p>The working principle of BEM solvers is depicted in the following flow chart:</p><p><img vspace="5" hspace="5" src="../figures/bemflowchart.jpg" alt=""> </p><p>After defining the surface and the dielectric properties of the metallic nanoparticle, we can compute for a given excitation (e.g. plane-wave illumination, oscillating dipole) the surface charges <tt>sig</tt> located at the boundaries of the nanoparticle.  <tt>sig</tt> is determined such that the boundary conditons of Maxwells's equations are fulfilled.  Once <tt>sig</tt> is computed, we can evaluate various measurement quantities such as scattering or absorption cross sections.</p><pre class="codeinput"><span class="comment">%  light wavelength in vacuum</span>
+</pre>
+<p>The working principle of BEM solvers is depicted in the following flow chart:</p>
+<p>
+<img vspace="5" hspace="5" src="../figures/bemflowchart.jpg" alt=""> </p>
+<p>After defining the surface and the dielectric properties of the metallic nanoparticle, we can compute for a given excitation (e.g. plane-wave illumination, oscillating dipole) the surface charges <tt>sig</tt> located at the boundaries of the nanoparticle.  <tt>sig</tt> is determined such that the boundary conditons of Maxwells's equations are fulfilled. Once <tt>sig</tt> is computed, we can evaluate various measurement quantities such as scattering or absorption cross sections.</p>
+<pre class="codeinput">
+<span class="comment">%  light wavelength in vacuum</span>
 enei = linspace( 400, 700, 80 );
 <span class="comment">%  plane wave excitation, light polarization and propagation direction</span>
 exc = planewave( [ 1, 0, 0; 0, 1, 0 ], [ 0, 0, 1; 0, 0, 1 ], op );
@@ -88,11 +143,23 @@ sca = zeros( length( enei ), 2 );
   sig = bem \ exc( p, enei( ien ) );
   sca( ien, : ) = exc.sca( sig );
 <span class="keyword">end</span>
-</pre><p>In the above example we first define the photon energies <tt>enei</tt> and the type of excitation, here a plane-wave excitation for two different light polarizations <tt>[1,0,0]</tt> and <tt>[0,1,0]</tt> and light propagation direction along z.  In the wavelengths loop, the command <tt>sig=bem\exc</tt> computes the surface charges <tt>sig</tt> and we finally compute through <tt>exc.sca(sig)</tt> the scattering cross section.  The cross section can be finally plotted via</p><pre class="codeinput">plot( enei, sca, <span class="string">'o-'</span> );
+</pre>
+<p>In the above example we first define the photon energies <tt>enei</tt> and the type of excitation, here a plane-wave excitation for two different light polarizations <tt>[1,0,0]</tt> and <tt>[0,1,0]</tt> and light propagation direction along z. In the wavelengths loop, the command <tt>sig=bem\exc</tt> computes the surface charges <tt>sig</tt> and we finally compute through <tt>exc.sca(sig)</tt> the scattering cross section. The cross section can be finally plotted via</p>
+<pre class="codeinput">plot( enei, sca, <span class="string">'o-'</span> );
 <span class="comment">%  annotate plot</span>
 xlabel( <span class="string">'Wavelength (nm)'</span> );
 ylabel( <span class="string">'Scattering cross section'</span> );
-</pre><p><img vspace="5" hspace="5" src="../figures/csca.jpg" alt=""> </p><p>Copyright 2017 Ulrich Hohenester</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+</pre>
+<p>
+<img vspace="5" hspace="5" src="../figures/csca.jpg" alt=""> </p>
+<p>Copyright 2017 Ulrich Hohenester</p>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023b</a>
+<br>
+</p>
+</div>
+<!--
 ##### SOURCE BEGIN #####
 %% Getting Started with the MNPBEM Toolbox
 %
@@ -192,4 +259,6 @@ ylabel( 'Scattering cross section' );
 % Copyright 2017 Ulrich Hohenester
 
 ##### SOURCE END #####
---></body></html>
+-->
+</body>
+</html>

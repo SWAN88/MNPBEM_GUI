@@ -1,13 +1,18 @@
-
-<!DOCTYPE html
-  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Dipole excitation</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-02-18"><meta name="DC.source" content="bem_ug_dipole.m"><style type="text/css">
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+      -->
+<title>Dipole excitation</title>
+<meta name="generator" content="MATLAB 23.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-11-05">
+<meta name="DC.source" content="bem_ug_dipole.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
 html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
@@ -23,7 +28,7 @@ a:visited { color:#004aa0; text-decoration:none; }
 
 p { padding:0px; margin:0px 0px 20px; }
 img { padding:0px; margin:0px 0px 20px; border:none; }
-p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
 
 ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
 ul li { padding:0px; margin:0px 0px 7px 0px; }
@@ -52,6 +57,7 @@ span.comment { color:#228B22 }
 span.string { color:#A020F0 }
 span.untermstring { color:#B20000 }
 span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
 
 .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
 .footer p { margin:0px; }
@@ -66,22 +72,101 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Dipole excitation</h1><!--introduction--><p>Dipole excitations of metallic nanoparticles allow to compute total and radiative scattering rates for dipoles, and to evaluate the photonic local density of states</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialization</a></li><li><a href="#3">Methods</a></li><li><a href="#7">Tips and tricks</a></li><li><a href="#8">Implementation</a></li><li><a href="#9">Dyadic Green function</a></li><li><a href="#10">Examples</a></li></ul></div><h2 id="1">Initialization</h2><pre class="codeinput"><span class="comment">%  initialize DIPOLE object with given dipole positions PT</span>
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Dipole excitation</h1>
+<!--introduction-->
+<p>Dipole excitations of metallic nanoparticles allow to compute total and radiative scattering rates for dipoles, and to evaluate the photonic local density of states</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Initialization</a>
+</li>
+<li>
+<a href="#3">Methods</a>
+</li>
+<li>
+<a href="#7">Tips and tricks</a>
+</li>
+<li>
+<a href="#8">Implementation</a>
+</li>
+<li>
+<a href="#9">Dyadic Green function</a>
+</li>
+<li>
+<a href="#10">Examples</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Initialization</h2>
+<pre class="codeinput">
+<span class="comment">%  initialize DIPOLE object with given dipole positions PT</span>
 dip = dipole( pt, op );
 <span class="comment">%  pass additional arguments</span>
 dip = dipole( pt, op, <span class="string">'PropertyName'</span>, PropertyValue );
 <span class="comment">%  provide transition dipole moments DIR</span>
 dip = dipole( pt, dir, op );
-</pre><p>In the initialization, the following parameters and additional properties are used</p><div><ul><li><b><tt>pt</tt></b> is a <a href="bem_ug_compoint.html">compoint</a> object that defines the dipole positions.</li><li><b><tt>dir</tt></b> defines the directions of the dipoles, e.g. <tt>dir=[0,0,1]</tt>.  On default dipoles oriented along x, y, and z are considered.</li><li><b><tt>op</tt></b> is the option structure for the MNPBEM simulations.</li><li><b><tt>'pinfty'</tt></b> provides a user-defined unit-sphere discretization for the computation of the radiative scattering rates for retarded simulations.</li></ul></div><p><tt>dipole</tt> is a wrapper function that selects from the options and property settings one of several classes.</p><h2 id="3">Methods</h2><p>Once the <tt>dipole</tt> excitation is initialized, one can compute the excitation potentials at the boundary of a <tt>comparticle</tt> object at a given wavelength <tt>enei</tt> according to</p><pre class="codeinput"><span class="comment">%  compute excitation potentials at the boundary of particle P</span>
+</pre>
+<p>In the initialization, the following parameters and additional properties are used</p>
+<div>
+<ul>
+<li>
+<b><tt>pt</tt></b> is a <a href="bem_ug_compoint.html">compoint</a> object that defines the dipole positions.</li>
+<li>
+<b><tt>dir</tt></b> defines the directions of the dipoles, e.g. <tt>dir=[0,0,1]</tt>. On default dipoles oriented along x, y, and z are considered.</li>
+<li>
+<b><tt>op</tt></b> is the option structure for the MNPBEM simulations.</li>
+<li>
+<b><tt>'pinfty'</tt></b> provides a user-defined unit-sphere discretization for the computation of the radiative scattering rates for retarded simulations.</li>
+</ul>
+</div>
+<p>
+<tt>dipole</tt> is a wrapper function that selects from the options and property settings one of several classes.</p>
+<h2 id="3">Methods</h2>
+<p>Once the <tt>dipole</tt> excitation is initialized, one can compute the excitation potentials at the boundary of a <tt>comparticle</tt> object at a given wavelength <tt>enei</tt> according to</p>
+<pre class="codeinput">
+<span class="comment">%  compute excitation potentials at the boundary of particle P</span>
 pot = dip( p, enei );
 <span class="comment">%  one can also directly use them in the call to a BEM solver</span>
 sig = bem \ dip( p, enei );
-</pre><p>In addition to excitations, <tt>dipole</tt> also allows to compute the various decay rates according to</p><pre class="codeinput"><span class="comment">%  compute total and radiative scattering rates</span>
+</pre>
+<p>In addition to excitations, <tt>dipole</tt> also allows to compute the various decay rates according to</p>
+<pre class="codeinput">
+<span class="comment">%  compute total and radiative scattering rates</span>
 <span class="comment">%    RAD0 is the free-space decay rate of the embedding medium</span>
 [ tot, rad, rad0 ] = dip.decayrate( sig );
-</pre><p>For <a href="bem_ug_layerstructure.html">layer structures</a>, one can additionally compute the  total and radiative scattering rates for the layer structure alone</p><pre class="codeinput"><span class="comment">%  compute total and radiative scattering rates for only layer structure</span>
+</pre>
+<p>For <a href="bem_ug_layerstructure.html">layer structures</a>, one can additionally compute the total and radiative scattering rates for the layer structure alone</p>
+<pre class="codeinput">
+<span class="comment">%  compute total and radiative scattering rates for only layer structure</span>
 [ tot, rad, rad0 ] = dip.decayrate0( enei );
-</pre><p>Note that our present implementation uses finite differences for the calculation of the dipole potentials and fields.  We expect that this approach gives sufficiently accurate results for most plasmonics applications, but might be problematic for dielectric environments consisting of only real permittivities.</p><h2 id="7">Tips and tricks</h2><p>We recommend to place the dipoles sufficiently far away from the boundary or to refine the boundary elements close to the dipole positions, as shown for instance in <a href="matlab:edit('demodipstat4.m')">demodipstat4.m</a>.  As a rule of thumb, the distance between dipoles and boundary elements should be two to three times larger than the extension of the boundary elements.</p><p>Contrary to <a href="bem_ug_eels.html">EELS</a> simulations, where the electron beam can cross boundary elements without causing any difficulties, a dipole close to a boundary induces a mirror dipole whose surface charge distribution has to be resolved by that of the discretized particle boundaries.  One might solve the problem by separating out the mirror dipole from the additional induced surface charge distribution, but we have not attempted such an approach yet.</p><h2 id="8">Implementation</h2><p>The total decay rate is computed according to (see e.g. Novotny and Hecht, Principles of Nano Optics, Cambridge Univ. Press, 2006)</p><p><img src="bem_ug_dipole_eq13458278558336691812.png" alt="$$ \Gamma_{\rm tot}=\Gamma_{\rm rad}^0+\frac 12\Im m\left[{\bf d}&#xA;   \cdot{\bf E}_{\rm ind}\right]\,,\quad&#xA;   \Gamma_{\rm rad}^0=\frac 43n_b k^3\,. $$"></p><p>Here <img src="bem_ug_dipole_eq17737360639837884203.png" alt="$\Gamma_{\rm rad}^0$"> is the free-space decay rate of the Wigner-Weisskopf approach, <img src="bem_ug_dipole_eq06845837190331836182.png" alt="${\bf d}$"> is the transition dipole moment, <img src="bem_ug_dipole_eq17246067459633404187.png" alt="$n_b$"> is the refractive index of the embedding medium, and <img src="bem_ug_dipole_eq08010741683579161625.png" alt="${\bf E}_{\rm ind}$"> is the induced electric field at the position of the dipole.  For the quasistatic approximation the above expression has to be treated with some care, as discussed in Anger et al., Phys. Rev. Lett. <b>96</b>, 113002 (2006).  For quasistatic simulations, the radiative decay rate is</p><p><img src="bem_ug_dipole_eq12434035140751557743.png" alt="$$ \Gamma_{\rm rad}=|{\bf d}+{\bf d}_{\rm ind}|^2\,\Gamma_{\rm rad}^0\,,&#xA;$$"></p><p>where <img src="bem_ug_dipole_eq11454751842434914461.png" alt="${\bf d}_{\rm ind}$"> is the induced dipole moment of the nanoparticle.  For retarded simulations, the radiative decay rate is computed by integrating the outgoing Poynting vector in the farfield zone over a unit sphere, similarly to the computation of the scattering cross section for plane wave excitation.</p><h2 id="9">Dyadic Green function</h2><p>The dyadic Green function relates the electric field at some position <img src="bem_ug_dipole_eq14789424547000156473.png" alt="$\bf r$"> to a unit dipole at position <img src="bem_ug_dipole_eq13237868532704720912.png" alt="${\bf r}'$"> through</p><p><img src="bem_ug_dipole_eq05824749539375261935.png" alt="$$ {\bf E}({\bf r})=k^2\,{\bf G}({\bf r},{\bf r}';\omega)&#xA;     \cdot{\bf d}\,. $$"></p><p>Conveniently one decomposes the Green function <img src="bem_ug_dipole_eq06163288535622376833.png" alt="$\bf G$"> into a reflected part, that accounts for the induced fields of the dielectric particle, and a free-space part.  The reflected part is given by the induced electric field computed for an oscillating electric dipole with unit dipole moment.  One can thus use <tt>dipole</tt> objects  to compute the dyadic Green function of Maxwell's theory.</p><h2 id="10">Examples</h2><p>In the following example we compute the LDOS(z) for a nanotriangle in the plane of the triangle.</p><pre class="codeinput"><span class="comment">%  BEM options</span>
+</pre>
+<p>Note that our present implementation uses finite differences for the calculation of the dipole potentials and fields. We expect that this approach gives sufficiently accurate results for most plasmonics applications, but might be problematic for dielectric environments consisting of only real permittivities.</p>
+<h2 id="7">Tips and tricks</h2>
+<p>We recommend to place the dipoles sufficiently far away from the boundary or to refine the boundary elements close to the dipole positions, as shown for instance in <a href="matlab:edit('demodipstat4.m')">demodipstat4.m</a>. As a rule of thumb, the distance between dipoles and boundary elements should be two to three times larger than the extension of the boundary elements.</p>
+<p>Contrary to <a href="bem_ug_eels.html">EELS</a> simulations, where the electron beam can cross boundary elements without causing any difficulties, a dipole close to a boundary induces a mirror dipole whose surface charge distribution has to be resolved by that of the discretized particle boundaries. One might solve the problem by separating out the mirror dipole from the additional induced surface charge distribution, but we have not attempted such an approach yet.</p>
+<h2 id="8">Implementation</h2>
+<p>The total decay rate is computed according to (see e.g. Novotny and Hecht, Principles of Nano Optics, Cambridge Univ. Press, 2006)</p>
+<p>
+<img src="bem_ug_dipole_eq11571477578773155696.png" alt="$$ \Gamma_{\rm tot}=\Gamma_{\rm rad}^0+\frac 12\Im m\left[{\bf d}&#10;   \cdot{\bf E}_{\rm ind}\right]\,,\quad&#10;   \Gamma_{\rm rad}^0=\frac 43n_b k^3\,. $$"></p>
+<p>Here <img src="bem_ug_dipole_eq06207021701294806815.png" alt="$\Gamma_{\rm rad}^0$"> is the free-space decay rate of the Wigner-Weisskopf approach, <img src="bem_ug_dipole_eq03610481812165128626.png" alt="${\bf d}$"> is the transition dipole moment, <img src="bem_ug_dipole_eq10945581613471931763.png" alt="$n_b$"> is the refractive index of the embedding medium, and <img src="bem_ug_dipole_eq13295498273587790295.png" alt="${\bf E}_{\rm ind}$"> is the induced electric field at the position of the dipole. For the quasistatic approximation the above expression has to be treated with some care, as discussed in Anger et al., Phys. Rev. Lett. <b>96</b>, 113002 (2006). For quasistatic simulations, the radiative decay rate is</p>
+<p>
+<img src="bem_ug_dipole_eq05541188184166635377.png" alt="$$ \Gamma_{\rm rad}=|{\bf d}+{\bf d}_{\rm ind}|^2\,\Gamma_{\rm rad}^0\,,&#10;$$"></p>
+<p>where <img src="bem_ug_dipole_eq01207840954101009217.png" alt="${\bf d}_{\rm ind}$"> is the induced dipole moment of the nanoparticle. For retarded simulations, the radiative decay rate is computed by integrating the outgoing Poynting vector in the farfield zone over a unit sphere, similarly to the computation of the scattering cross section for plane wave excitation.</p>
+<h2 id="9">Dyadic Green function</h2>
+<p>The dyadic Green function relates the electric field at some position <img src="bem_ug_dipole_eq14599817464488884307.png" alt="$\bf r$"> to a unit dipole at position <img src="bem_ug_dipole_eq00433188330044297367.png" alt="${\bf r}'$"> through</p>
+<p>
+<img src="bem_ug_dipole_eq12646584938390972117.png" alt="$$ {\bf E}({\bf r})=k^2\,{\bf G}({\bf r},{\bf r}';\omega)&#10;     \cdot{\bf d}\,. $$"></p>
+<p>Conveniently one decomposes the Green function <img src="bem_ug_dipole_eq06653963851727721197.png" alt="$\bf G$"> into a reflected part, that accounts for the induced fields of the dielectric particle, and a free-space part. The reflected part is given by the induced electric field computed for an oscillating electric dipole with unit dipole moment. One can thus use <tt>dipole</tt> objects to compute the dyadic Green function of Maxwell's theory.</p>
+<h2 id="10">Examples</h2>
+<p>In the following example we compute the LDOS(z) for a nanotriangle in the plane of the triangle.</p>
+<pre class="codeinput">
+<span class="comment">%  BEM options</span>
 op = bemoptions( <span class="string">'sim'</span>, <span class="string">'stat'</span> );
 <span class="comment">%  triangular particle</span>
 [ p, poly ] = tripolygon( round( polygon( 3, <span class="string">'size'</span>, [ 30, 30 ] ) ), edgeprofile( 5 ) );
@@ -111,7 +196,17 @@ plot( p, <span class="string">'EdgeColor'</span>, <span class="string">'b'</span
 plot( p2, log10( tot ) );
 
 colormap <span class="string">hot( 255 )</span>;
-</pre><p><img vspace="5" hspace="5" src="../figures/ldostri.jpg" alt=""> </p><p>Copyright 2017 Ulrich Hohenester</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+</pre>
+<p>
+<img vspace="5" hspace="5" src="../figures/ldostri.jpg" alt=""> </p>
+<p>Copyright 2017 Ulrich Hohenester</p>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023b</a>
+<br>
+</p>
+</div>
+<!--
 ##### SOURCE BEGIN #####
 %% Dipole excitation
 %
@@ -276,4 +371,6 @@ colormap hot( 255 );
 %
 % Copyright 2017 Ulrich Hohenester
 ##### SOURCE END #####
---></body></html>
+-->
+</body>
+</html>

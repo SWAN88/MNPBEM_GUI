@@ -28,7 +28,7 @@ p1 = shift(trisphere(722, 2*radius), [  radius + gap/2, 0, radius + gap]);
 p2 = shift(trisphere(722, 2*radius), [- radius - gap/2, 0, radius + gap]);
 
 % set up COMPARTICLE object
-p = comparticle(epstab, {p1, p2}, [2, 1; 3, 1], 1, 2, op);
+p = comparticle(epstab, {p1, p2}, [2, 1; 2, 1], 1, 2, op);
 
 %  shift nanosphere 1 nm above layer
 p = shift(p, [0, 0, - min(p.pos(:, 3)) + 1 + ztab]); 

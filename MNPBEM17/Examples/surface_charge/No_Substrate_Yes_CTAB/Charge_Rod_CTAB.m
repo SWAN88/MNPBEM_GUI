@@ -5,15 +5,19 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
-epstab = {epsconst(1.0), epstable('gold.dat'), epsconst(1.42^2)};
+epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.42^2)};
 
 % initialize nanorod
-length_rod = 60;
+% initialize nanorod
 width_rod = 20;
-core = trirod(width_rod, length_rod, [20, 10, length_rod / 2]);
+length_rod = 60;
+nphi = 3;
+ntheta = 3;
+nz = 3;
+core = trirod(width_rod, length_rod, [(width_rod+1)*(pi/nphi), (width_rod+1)/ntheta, (length_rod-width_rod+1)/nz], 'triangles');
 
 % initialize shell
 shellthickness = 3.5;
@@ -38,8 +42,8 @@ enei = 600;
 
 sig = bem \ exc(p, enei);
 %  plot surface charge SIG2 at particle outside
-figure(1);
-plot(p, sig.sig2);
+figure(2);
+plot(p, sig.sig);
 colormap('whitejet');  % need to install the colormap 
 clim([-0.1 0.1])
 colorbar

@@ -12,7 +12,7 @@ epstab = {epsconst(1), epstable('gold_olmon.dat'), epsconst(1.52^2), epsconst(1.
 ztab = 0;
 op = layerstructure.options;
 layer = layerstructure(epstab, [1, 3], ztab, op);
-op = bemoptions('sim', 'ret', 'interp', 'curv', 'waitbar', 0, 'layer', layer);
+op = bemoptions('sim', 'stat', 'interp', 'curv', 'waitbar', 0, 'layer', layer);
 
 % initialize nanorod
 width_rod = 20;
@@ -20,7 +20,6 @@ length_rod = 60;
 nphi = 3;
 ntheta = 3;
 nz = 3;
-
 core = trirod(width_rod, length_rod, [(width_rod+1)*(pi/nphi), (width_rod+1)/ntheta, (length_rod-width_rod+1)/nz], 'triangles');
 
 % initialize shell
@@ -34,7 +33,7 @@ p = rot(p, 90, [0, 1, 0]);
 figure(1)
 plot(p, 'EdgeColor', 'b');
 
-enei = 400:100:1000;
+enei = 400:10:1000;
 
 % 
 if ~exist('greentab', 'var') || ~greentab.ismember(layer, enei, p)

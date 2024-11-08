@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1.0), epstable('gold_olmon.dat')};
