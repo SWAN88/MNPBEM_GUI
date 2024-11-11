@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.42^2)};
@@ -17,7 +17,6 @@ nphi = 3;
 ntheta = 3;
 nz = 3;
 
-% p = trirod(width_rod, length_rod, [20, 10, length_rod / 2]);
 core = trirod(width_rod, length_rod, [(width_rod+1)*(pi/nphi), (width_rod+1)/ntheta, (length_rod-width_rod+1)/nz], 'triangles');
 
 % initialize shell
@@ -36,6 +35,7 @@ bem = bemsolver(p, op);
 
 % plane wave excitation
 exc = planewave([1, 0, 0], [0, 0, 1], op);
+% exc = planewave([1, 0, 0; 0, 1, 0], [0, 0, 1; 0, 0, 1], op);
 
 % wavelength of interest
 enei = 600;
