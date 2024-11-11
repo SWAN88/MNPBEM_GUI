@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.42^2)};
@@ -74,7 +74,7 @@ filepath = "C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documen
 spec_file = [enei', sum(sca, 2)*1e-18, sum(abs, 2)*1e-18];
 
 % Define file paths with the desired directory and filenames
-spec_filepath = fullfile(filepath, [particle_name '_spec_ctab.csv']);
+spec_filepath = fullfile(filepath, [particle_name 'ctab_spec.csv']);
 
 % Open the file for writing
 fid = fopen(spec_filepath, 'w');
