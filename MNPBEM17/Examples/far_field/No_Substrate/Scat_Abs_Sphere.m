@@ -5,14 +5,14 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1.0), epstable('gold_olmon.dat')};
 
 % initialize nanosphere
 radius = 14.5;
-p = trisphere(722, 2*radius);
+p = trisphere(144, 2*radius);
 
 % set up COMPARTICLE object
 p = comparticle(epstab, {p}, [2, 1], 1, op);

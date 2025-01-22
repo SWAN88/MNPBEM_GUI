@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret');
+op = bemoptions('sim', 'stat');
 
 % set dielectric environment
 epstab = {epsconst(1), epstable('gold_olmon.dat')};
@@ -37,7 +37,7 @@ enei = 600;
 sig = bem \ exc(p, enei);
 %  plot surface charge SIG2 at particle outside
 figure(1);
-plot(p, sig.sig2);
+plot(p, sig.sig);
 colormap('whitejet');  % need to install the colormap 
-clim([-0.1 0.1])
+% clim([-0.1 0.1])
 colorbar

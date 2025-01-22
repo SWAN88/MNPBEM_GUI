@@ -61,5 +61,5 @@ sig = bem \ exc(p, enei);
 figure(1);
 plot(p, sig.sig);
 colormap('whitejet');  % need to install the colormap 
-clim([-0.1 0.1])
+% clim([-0.1 0.1])
 colorbar

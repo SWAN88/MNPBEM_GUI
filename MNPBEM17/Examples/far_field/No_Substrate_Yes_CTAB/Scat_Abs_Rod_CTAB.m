@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'stat', 'interp', 'curv');
+op = bemoptions('sim', 'ret', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.42^2)};
@@ -24,7 +24,7 @@ core = trirod(width_rod, length_rod, [(width_rod+1)*(pi/nphi), (width_rod+1)/nth
 shellthickness = 3.5;
 shell = trirod(width_rod+shellthickness*2, length_rod+shellthickness*2, [(width_rod+1)*(pi/nphi), (width_rod+1)/ntheta, (length_rod-width_rod+1)/nz], 'triangles');
 % array of dielectrics with first row as [in,out] for core and second row as [in,out] for shell, eg. [1,2;2,3]
-p = comparticle(epstab, {core, shell}, [2, 3; 3, 1], 1, 2, op); 
+p = comparticle(epstab, {core, shell}, [2, 3; 3, 1], 1, 2, op);
 p = rot(p, 90, [0, 1, 0]);
 
 % visualize object

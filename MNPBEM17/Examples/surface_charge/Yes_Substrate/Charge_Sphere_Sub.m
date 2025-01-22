@@ -21,7 +21,7 @@ op = bemoptions('sim', 'stat', 'layer', layer);
 
 % initialize nanosphere
 radius = 14.5;
-p = trisphere(144, 2*radius);
+p = trisphere(722, 2*radius);
 
 %  shift nanosphere 1 nm above layer
 p = shift(p, [0, 0, - min(p.pos(:, 3)) + 1 + ztab]); 
@@ -55,5 +55,5 @@ sig = bem \ exc(p, enei);
 figure(1);
 plot(p, sig.sig);
 colormap('whitejet');  % need to install the colormap 
-clim([-0.1 0.1])
+% clim([-0.1 0.1])
 colorbar

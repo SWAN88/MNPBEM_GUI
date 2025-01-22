@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1), epstable('gold_olmon.dat'), epstable('gold_olmon.dat')};
@@ -13,8 +13,8 @@ epstab = {epsconst(1), epstable('gold_olmon.dat'), epstable('gold_olmon.dat')};
 % initialize nanosphere dimer
 radius = 14.5;
 gap = 5;
-p1 = shift(trisphere(722, 2*radius), [  radius + gap/2, 0, radius + gap]);
-p2 = shift(trisphere(722, 2*radius), [- radius - gap/2, 0, radius + gap]);
+p1 = shift(trisphere(1444, 2*radius), [  radius + gap/2, 0, radius + gap]);
+p2 = shift(trisphere(1444, 2*radius), [- radius - gap/2, 0, radius + gap]);
 
 % set up COMPARTICLE object
 p = comparticle(epstab, {p1, p2}, [2, 1; 3, 1], 1, 2, op);

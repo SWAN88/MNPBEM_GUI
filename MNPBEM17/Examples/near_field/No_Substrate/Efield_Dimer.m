@@ -5,7 +5,7 @@ close all;
 addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Documents\MATLAB\MNPBEM_GUI\MNPBEM17'))  
 
 %% options for BEM simulation
-op = bemoptions('sim', 'ret', 'interp', 'curv');
+op = bemoptions('sim', 'stat', 'interp', 'curv');
 
 % set dielectric environment
 epstab = {epsconst(1), epstable('gold_olmon.dat'), epstable('gold_olmon.dat')};
@@ -38,7 +38,7 @@ sig = bem \ exc(p, enei);
 sca(1, :) = exc.sca(sig);
 ext(1, :) = exc.ext(sig);
 
-[x, y] = meshgrid(linspace(-90, 90, 362), linspace(-35, 35, 142));
+[x, y] = meshgrid(linspace(-40, 40, 161), linspace(-40, 40, 161));
 
 % particle boundary
 emesh = meshfield(p, x, y, 0, op, 'mindist', 0.15, 'nmax', 2000);

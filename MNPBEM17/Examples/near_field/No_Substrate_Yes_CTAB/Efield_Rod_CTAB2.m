@@ -8,7 +8,7 @@ addpath(genpath('C:\Users\katsuya2\OneDrive - University of Illinois - Urbana\Do
 op = bemoptions('sim', 'ret', 'interp', 'curv');
 
 % set dielectric environment
-epstab = {epsconst(1.0), epstable('gold_olmon.dat'), epsconst(1.42^2)};
+epstab = {epsconst(1.0), epsconst(1.42^2), epstable('gold_olmon.dat')};
 
 % initialize nanorod
 width_rod = 20;
@@ -22,8 +22,7 @@ core = trirod(width_rod, length_rod, [(width_rod+1)*(pi/nphi), (width_rod+1)/nth
 % initialize shell
 shellthickness = 3.5;
 shell = trirod(width_rod+shellthickness*2, length_rod+shellthickness*2, [(width_rod+1)*(pi/nphi), (width_rod+1)/ntheta, (length_rod-width_rod+1)/nz], 'triangles');
-% array of dielectrics with first row as [in,out] for core and second row as [in,out] for shell, eg. [1,2;2,3]
-p = comparticle(epstab, {core, shell}, [2, 3; 3, 1], 1, 2, op); 
+p = comparticle(epstab, {shell, core}, [2, 1; 3, 2], [1, -2], 2, op); 
 p = rot(p, 90, [0, 1, 0]);
 
 % visualize object
@@ -36,7 +35,6 @@ bem = bemsolver(p, op);
 % plane wave excitation
 exc = planewave([1, 0, 0], [0, 0, 1], op);
 % exc = planewave([1, 0, 0; 0, 1, 0], [0, 0, 1; 0, 0, 1], op);
-% -> Error using image / Error using imagesc
 
 % wavelength of interest
 enei = 600;
